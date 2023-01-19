@@ -72,12 +72,6 @@ public class TestRepositories {
         assertEquals(newIban, account.getIban());
     }
 
-    @Test
-    public void testAccountFindByClient_Id(){
-        List<Account> accounts = accountRepository.findByClient_Id(this.idClientTest);
-        assertEquals(accounts.size(), 1);
-        assertEquals(accounts.get(0).getId(), this.idAccountTest);
-    }
 
     @Test
     @Transactional

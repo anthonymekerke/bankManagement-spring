@@ -3,11 +3,13 @@ package com.example.BankManagement.util;
 import org.springframework.beans.BeanUtils;
 
 import com.example.BankManagement.business.dto.AccountBasicDTO;
+import com.example.BankManagement.business.dto.ClientBasicDTO;
 import com.example.BankManagement.business.dto.CurrentAccountBasicDTO;
 import com.example.BankManagement.business.dto.SavingAccountBasicDTO;
 import com.example.BankManagement.business.dto.TransactionBasicDTO;
 import com.example.BankManagement.business.dto.TransactionFullDTO;
 import com.example.BankManagement.business.entity.Account;
+import com.example.BankManagement.business.entity.Client;
 import com.example.BankManagement.business.entity.Transaction;
 
 public class DTOConverter {
@@ -69,5 +71,11 @@ public class DTOConverter {
         if(dto.getWithdraw() != null){entity.setWithdraw(dto.getWithdraw());}
 
         return entity;
+    }
+
+    public static ClientBasicDTO ClientEntitytoBasicDTO(Client entity){
+        ClientBasicDTO dto = new ClientBasicDTO();
+        BeanUtils.copyProperties(entity, dto);
+        return dto;
     }
 }

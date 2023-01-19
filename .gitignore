@@ -1,3 +1,6 @@
+## custom
+src/main/java/com/example/BankManagement/test/
+
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
