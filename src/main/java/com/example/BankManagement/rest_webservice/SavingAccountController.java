@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.BankManagement.business.dto.SavingAccountBasicDTO;
 import com.example.BankManagement.business.service.IAccountService;
+import com.example.BankManagement.exception.BankManagementBusinessException;
 import com.example.BankManagement.util.AppConstants;
 
 /*
@@ -39,6 +40,10 @@ public class SavingAccountController {
 
     @GetMapping("/{id}")
     public SavingAccountBasicDTO getSavingAccountsId(@PathVariable(value="id") int id, Authentication authentication){
-        return (SavingAccountBasicDTO)accountService.readByIdAndClientLogin(id, authentication.getName());
+        try {
+            return (SavingAccountBasicDTO)accountService.readByIdAndClientLogin(id, authentication.getName());
+        } catch (BankManagementBusinessException e) {
+            return null;
+        }
     }
 }

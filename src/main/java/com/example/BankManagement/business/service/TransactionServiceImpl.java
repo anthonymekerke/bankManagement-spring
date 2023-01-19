@@ -7,6 +7,7 @@ import com.example.BankManagement.business.dto.TransactionBasicDTO;
 import com.example.BankManagement.business.dto.TransactionFullDTO;
 import com.example.BankManagement.business.entity.Transaction;
 import com.example.BankManagement.business.repository.ITransactionRepository;
+import com.example.BankManagement.exception.BankManagementBusinessException;
 import com.example.BankManagement.util.DTOConverter;
 
 @Service
@@ -16,19 +17,22 @@ public class TransactionServiceImpl implements ITransactionService {
     ITransactionRepository transactionRepository;
 
     @Override
-    public TransactionBasicDTO readById(int id){
-        Transaction entity;
-        entity = this.transactionRepository.findById(id).orElse(null);
-        if(entity == null) {return null;}
+    public TransactionBasicDTO readByIdAndClientLogin(int tr_id, String client_login) throws BankManagementBusinessException{
+        Transaction entity = this.transactionRepository.findByIdAndAccount_Client_Login(tr_id, client_login).orElse(null);
+
+        if(entity == null) {throw new BankManagementBusinessException("The Transaction n°"+tr_id+" is not owned by this client");}
+
         return DTOConverter.TransactionEntitytoBasicDTO(entity);
     }
 
     @Override
     public TransactionFullDTO create(TransactionFullDTO dto) {
-        Transaction entity;
+        Transaction entity = getLastTransactionByAccountId(dto.getAccount().getId());
+        float prevBalance = 0.0f, nextBalance;
 
-        float prevBalance = getLastTransactionByAccountId(dto.getAccount().getId()).getBalance();
-        float nextBalance = dto.getPayment() != null ? prevBalance + dto.getPayment() : prevBalance - dto.getWithdraw();
+        if(entity != null){prevBalance = entity.getBalance();}
+        
+        nextBalance = dto.getPayment() != null ? prevBalance + dto.getPayment() : prevBalance - dto.getWithdraw();
         dto.setBalance(nextBalance);
 
         entity = DTOConverter.TransactionFullDTOtoEntity(dto);
@@ -38,7 +42,7 @@ public class TransactionServiceImpl implements ITransactionService {
     }
 
     private Transaction getLastTransactionByAccountId(int account_id){
-        return transactionRepository.findFirstByAccountIdOrderByValueDateDesc(account_id);
+        return transactionRepository.findFirstByAccountIdOrderByValueDateDesc(account_id).orElse(null);
     }
 
     //////////////////////////////////////////

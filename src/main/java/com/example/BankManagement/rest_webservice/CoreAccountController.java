@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.BankManagement.business.dto.AccountBasicDTO;
 import com.example.BankManagement.business.dto.TransactionBasicDTO;
 import com.example.BankManagement.business.service.IAccountService;
+import com.example.BankManagement.exception.BankManagementBusinessException;
 import com.example.BankManagement.util.AppConstants;
 
 /*
@@ -30,16 +31,28 @@ public class CoreAccountController {
 
     @GetMapping("/{id}/transactions")
     public List<TransactionBasicDTO> getAccountsIdTransactions(@PathVariable(value="id") int id, Authentication authentication){
-        return this.accountService.readTransactionByAccountIdAndClientLogin(id, authentication.getName());
+        try {
+            return this.accountService.readTransactionByAccountIdAndClientLogin(id, authentication.getName());
+        } catch (BankManagementBusinessException e) {
+            return null;
+        }
     }
 
     @GetMapping("/{id}")
     public AccountBasicDTO getAccountsId(@PathVariable(value = "id") int id, Authentication authentication){
-        return this.accountService.readByIdAndClientLogin(id, authentication.getName());
+        try {
+            return this.accountService.readByIdAndClientLogin(id, authentication.getName());
+        } catch (BankManagementBusinessException e) {
+            return null;
+        }
     }
 
     @GetMapping
     public List<AccountBasicDTO> getAccounts(Authentication authentication){
-        return this.accountService.readByClientLogin(authentication.getName());
+        try {
+            return this.accountService.readByClientLogin(authentication.getName());
+        } catch (BankManagementBusinessException e) {
+            return null;
+        }
     }
 }

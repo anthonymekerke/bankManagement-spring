@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.BankManagement.business.dto.ClientBasicDTO;
 import com.example.BankManagement.business.service.IClientService;
+import com.example.BankManagement.exception.BankManagementBusinessException;
 
 @RestController
 @RequestMapping("/clients")
@@ -18,7 +19,14 @@ public class ClientController {
 
     @GetMapping
     public ClientBasicDTO getClients(Authentication authentication){
-        return clientService.readClientByLogin(authentication.getName());
+        try{
+            return clientService.readClientByLogin(authentication.getName());
+        }catch(BankManagementBusinessException e){
+            /*
+             * handle the case when nothing is return with ResponseEntity.
+             */
+            return null;
+        }
     }
 
     /*

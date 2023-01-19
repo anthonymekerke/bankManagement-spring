@@ -15,6 +15,7 @@ import com.example.BankManagement.business.repository.IAccountRepository;
 import com.example.BankManagement.business.repository.ICurrentAccountRepository;
 import com.example.BankManagement.business.repository.ISavingAccountRepository;
 import com.example.BankManagement.business.repository.ITransactionRepository;
+import com.example.BankManagement.exception.BankManagementBusinessException;
 import com.example.BankManagement.util.AppConstants;
 import com.example.BankManagement.util.DTOConverter;
 
@@ -41,16 +42,23 @@ public class CoreAccountServiceImpl implements IAccountService{
     protected ITransactionRepository transactionRepository;
 
     @Override
-    public AccountBasicDTO readByIdAndClientLogin(int account_id, String client_login){
+    public AccountBasicDTO readByIdAndClientLogin(int account_id, String client_login) throws BankManagementBusinessException{
         Account entity = accountRepository.findByIdAndClient_Login(account_id, client_login).orElse(null);
 
-        if(entity == null){return null;}
+        if(entity == null){
+            throw new BankManagementBusinessException("Account n°" + account_id + " not owned by this client.");
+        }
+
         return DTOConverter.CoreAccountEntitytoBasicDTO(entity, readAccountType(account_id), readBalance(account_id));
     }
 
     @Override
-    public List<AccountBasicDTO> readByClientLogin(String client_login) {
+    public List<AccountBasicDTO> readByClientLogin(String client_login) throws BankManagementBusinessException{
         List<Account> entities = accountRepository.findByClient_Login(client_login);
+
+        if(entities.size() == 0){
+            throw new BankManagementBusinessException("This client have no Accounts");
+        }
 
         return entities.stream()
                 .map(entity -> DTOConverter.CoreAccountEntitytoBasicDTO(entity, readAccountType(entity.getId()), readBalance(entity.getId())))
@@ -72,8 +80,12 @@ public class CoreAccountServiceImpl implements IAccountService{
     }
 
     @Override
-    public List<TransactionBasicDTO> readTransactionByAccountIdAndClientLogin(int account_id, String client_login){
+    public List<TransactionBasicDTO> readTransactionByAccountIdAndClientLogin(int account_id, String client_login) throws BankManagementBusinessException{
         List<Transaction> entities = transactionRepository.findByAccount_IdAndAccount_Client_Login(account_id, client_login);
+
+        if(entities.size() == 0){
+            throw new BankManagementBusinessException("No transactions yet for this Account");
+        }
 
         return entities.stream()
                 .map(entity -> DTOConverter.TransactionEntitytoBasicDTO(entity))
@@ -93,6 +105,7 @@ public class CoreAccountServiceImpl implements IAccountService{
     }
 
     protected float readBalance(int account_id){
-        return transactionRepository.findFirstByAccountIdOrderByValueDateDesc(account_id).getBalance();
+        Transaction last = transactionRepository.findFirstByAccountIdOrderByValueDateDesc(account_id).orElse(null);
+        return last == null ? 0.0f : last.getBalance();
     }
 }
