@@ -6,7 +6,9 @@ import com.example.BankManagement.business.dto.AccountBasicDTO;
 import com.example.BankManagement.business.dto.TransactionBasicDTO;
 
 public interface IAccountService {
-    AccountBasicDTO readById(int account_id);
-    List<AccountBasicDTO> readByClientLogin(String client_login);
+    //AccountBasicDTO readById(int account_id);
     List<TransactionBasicDTO> readCurrentMonthTransactions(int account_id);
+
+    AccountBasicDTO readByIdAndClientLogin(int account_id, String client_login);
+    List<AccountBasicDTO> readByClientLogin(String client_login);
 }

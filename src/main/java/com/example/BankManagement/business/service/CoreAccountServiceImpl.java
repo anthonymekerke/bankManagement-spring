@@ -41,8 +41,8 @@ public class CoreAccountServiceImpl implements IAccountService{
     protected ITransactionRepository transactionRepository;
 
     @Override
-    public AccountBasicDTO readById(int account_id){
-        Account entity = accountRepository.findById(account_id).orElse(null);
+    public AccountBasicDTO readByIdAndClientLogin(int account_id, String client_login){
+        Account entity = accountRepository.findByIdAndClient_Login(account_id, client_login).orElse(null);
 
         if(entity == null){return null;}
         return DTOConverter.CoreAccountEntitytoBasicDTO(entity, readAccountType(account_id), readBalance(account_id));
@@ -61,7 +61,7 @@ public class CoreAccountServiceImpl implements IAccountService{
     public List<TransactionBasicDTO> readCurrentMonthTransactions(int account_id) {
         /* TODO 
          * This method is supposed to retrieve transactions 
-         * of the current month but for now, it retrieves every transactions.
+         * of the current month but for now, it retrieves every transactions of the account.
          * This features will be implemented later using Pagination.
         */
         List<Transaction> entities = transactionRepository.findByAccount_Id(account_id);

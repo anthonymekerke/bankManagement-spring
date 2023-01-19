@@ -13,9 +13,9 @@ import com.example.BankManagement.util.DTOConverter;
 public class SavingAccountServiceImpl extends CoreAccountServiceImpl{
 
     @Override
-    public AccountBasicDTO readById(int account_id){
+    public AccountBasicDTO readByIdAndClientLogin(int account_id, String client_login){
         Account entity;
-        entity = savingAccountRepository.findById(account_id).orElse(null);
+        entity = savingAccountRepository.findByIdAndClient_Login(account_id, client_login).orElse(null);
         if(entity == null){return null;}
         return DTOConverter.SavingAccountEntitytoBasicDTO(entity, readBalance(account_id));
     }
