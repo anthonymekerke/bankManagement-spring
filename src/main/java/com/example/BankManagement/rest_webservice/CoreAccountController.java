@@ -16,9 +16,9 @@ import com.example.BankManagement.business.service.IAccountService;
 import com.example.BankManagement.util.AppConstants;
 
 /*
- * /accounts?client_id={connected user id} -> show the accounts of the connected user
- * /accounts/{id} -> show the account with basic attributes
- * /accounts/{id}/transactions -> show transactions of the account
+ * /accounts -> show the accounts of connected user
+ * /accounts/{id} -> show the account of connected user with basic attributes
+ * /accounts/{id}/transactions -> show every transactions of the account
 */
 @RestController
 @RequestMapping(value="/accounts")
@@ -29,8 +29,8 @@ public class CoreAccountController {
     private IAccountService accountService;
 
     @GetMapping("/{id}/transactions")
-    public List<TransactionBasicDTO> getAccountsIdTransactions(@PathVariable(value="id") int id){
-        return this.accountService.readCurrentMonthTransactions(id);
+    public List<TransactionBasicDTO> getAccountsIdTransactions(@PathVariable(value="id") int id, Authentication authentication){
+        return this.accountService.readTransactionByAccountIdAndClientLogin(id, authentication.getName());
     }
 
     @GetMapping("/{id}")

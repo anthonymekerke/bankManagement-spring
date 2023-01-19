@@ -71,6 +71,15 @@ public class CoreAccountServiceImpl implements IAccountService{
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<TransactionBasicDTO> readTransactionByAccountIdAndClientLogin(int account_id, String client_login){
+        List<Transaction> entities = transactionRepository.findByAccount_IdAndAccount_Client_Login(account_id, client_login);
+
+        return entities.stream()
+                .map(entity -> DTOConverter.TransactionEntitytoBasicDTO(entity))
+                .collect(Collectors.toList());
+    }
+
     private String readAccountType(int account_id){
         if(savingAccountRepository.existsById(account_id)){
             return AppConstants.SAVING_ACCOUNT_TYPE;
