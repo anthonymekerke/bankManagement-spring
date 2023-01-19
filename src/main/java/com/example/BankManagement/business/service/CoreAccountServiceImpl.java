@@ -49,8 +49,8 @@ public class CoreAccountServiceImpl implements IAccountService{
     }
 
     @Override
-    public List<AccountBasicDTO> readByClientId(int client_id) {
-        List<Account> entities = accountRepository.findByClient_Id(client_id);
+    public List<AccountBasicDTO> readByClientLogin(String client_login) {
+        List<Account> entities = accountRepository.findByClient_Login(client_login);
 
         return entities.stream()
                 .map(entity -> DTOConverter.CoreAccountEntitytoBasicDTO(entity, readAccountType(entity.getId()), readBalance(entity.getId())))

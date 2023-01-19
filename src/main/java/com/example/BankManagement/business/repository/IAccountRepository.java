@@ -10,5 +10,5 @@ import com.example.BankManagement.business.entity.Account;
 @Repository
 public interface IAccountRepository extends JpaRepository<Account, Integer>{
     
-    List<Account> findByClient_Id(int client_id);
+    List<Account> findByClient_Login(String client_login);
 }

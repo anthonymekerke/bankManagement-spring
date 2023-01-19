@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +40,7 @@ public class CoreAccountController {
     }
 
     @GetMapping
-    public List<AccountBasicDTO> getAccountsByClientId(@RequestParam(name="client_id") int client_id){
-        return this.accountService.readByClientId(client_id);
+    public List<AccountBasicDTO> getAccountsByAuthenticatedClientLogin(Authentication authentication){
+        return this.accountService.readByClientLogin(authentication.getName());
     }
 }
