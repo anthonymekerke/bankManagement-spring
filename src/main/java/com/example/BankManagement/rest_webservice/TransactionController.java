@@ -36,6 +36,7 @@ public class TransactionController {
         try {
             return ResponseEntity.ok(transactionService.create(dto));
         } catch (BankManagementBusinessException e) {
+            e.printStackTrace();
             return null;
         }
     }
