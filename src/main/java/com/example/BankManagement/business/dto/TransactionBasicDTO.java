@@ -2,14 +2,31 @@ package com.example.BankManagement.business.dto;
 
 import java.util.Date;
 
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+
+import com.example.BankManagement.validation.AlternateField;
+import com.example.BankManagement.validation.StartWithPrefixes;
+
+@AlternateField(firstField = "withdraw", secondField = "payment")
 public class TransactionBasicDTO implements IDTO{
     private int id;
 
-    private Date executionDate;
+    @FutureOrPresent(message="value date must be today or in the future")
     private Date valueDate;
-    private Float withdraw;
-    private Float payment;
+
+    @NotBlank(message="wording must not be empty and start with given prefix")
+    @StartWithPrefixes
     private String wording;
+
+    @Positive(message="withdraw value must be greater than zero")
+    private Float withdraw;
+
+    @Positive(message="payment value must be greater than zero")
+    private Float payment;
+
+    private Date executionDate;
     private Float balance;
 
     public TransactionBasicDTO() {

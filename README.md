@@ -13,71 +13,85 @@ Période: Octobre 2022 - Janvier 2023
 **Format des données:**
 <table>
     <tr>
-        <td><b>Table name</b></td><td>ID</td><td>...</td>
+        <td><b>Client</b></td><td>ID</td><td>LASTNAME</td><td>FIRSTNAME</td><td>LOGIN</td><td>PASSWORD</td><td>EMAIL</td><td>ACCESSION_DATE</td>
+    </tr>
+    <tr>
+      <td><b>Compte</b></td><td>ID</td><td>IBAN</td><td>LABEL</td><td>CREATION_DATE</td><td>FK_CLIENT</td>
+    </tr>
+    <tr>
+      <td><b>Compte Courant</b></td><td>BANK_OVERDRAFT</td><td>FK_ACCOUNT</td>
+    </tr>
+    <tr>
+      <td><b>Compte Épargne</b></td><td>INTEREST_RATE</td><td>FK_ACCOUNT</td>
+    </tr>
+    <tr>
+      <td><b>Transaction</b></td><td>ID</td><td>WORDING</td><td>PAYMENT</td><td>WITHDRAW</td><td>EXECUTION_DATE</td><td>VALUE_DATE</td><td>BALANCE</td><td>FK_ACCOUNT</td>
     </tr>
 </table>
 
 **Liste des URI (endpoints):**
 
 ```
- [VERBE] /register
+ GET /authenticate
 ```
-Permet aux utilisateurs de se connecter (à implémenter en même temps que la securité dans un loginController)
+Sert à l'authentification d'un utilisateur. Lorsque les identifiants fournies sont validés, l'authentification se fait par la suite à l'aide d'un jeton JWT.
 
 ```
-  /accounts[?client_id] -> show the accounts of the connected user
+ GET /accounts
 ```
-Accède aux **Compte** du **Client** connecté (Le paramètre *client_id* n'est par forcément utile -> essayer sans)
+Accède a la liste des **Compte** du **Client** connecté
 
 ```
-  /accounts/{id}
+ GET /accounts/{id}
 ```
-Accède au résumé du **Compte** avec l'identifiant donné (si appartient au **Client** connecté)
+Accède au détails du **Compte** identifié (si appartient au **Client** connecté)
 
 ```
-  /accounts/{id}/transactions
+ GET /accounts/{id}/transactions
 ```
-Accède aux dernières **Transaction** du **Compte** avec l'identifiant donné (si appartient au **Client** connecté)
+Accède à l'ensemble des **Transaction** du **Compte** identifié (si appartient au **Client** connecté)
 
 ```
-  /transactions/{id}
+ POST /transactions
 ```
-Accède aux détails de la **Transaction** donné (si appartient au **Client** connecté)
-
-```
-  /saving-accounts/{id}
-```
-Accède aux détails du **Compte Épargne** donné (si appartient au **Client** connecté)
+Créée une nouvelle **Transaction** pour le client connecté
 
 ```
-  /current-accounts/{id}
+ GET /transactions/{id}
 ```
-Accède aux détails du **Compte Courant** donné (si appartient au **Client** connecté)
+Accède aux détails de la **Transaction** identifié (si appartient au **Client** connecté)
 
-**Verbes HTTP:**
+```
+ GET /saving-accounts/{id}
+```
+Accède aux détails du **Compte Épargne** identifié (si appartient au **Client** connecté)
 
-GET(ressource): param -> _ ; return -> List<BasicDTO>
-GET(ressource/{id}): param -> id ; return -> FullDTO
-POST(ressource): param -> FullDTO ; return -> ResponseEntity<?>
-PUT(ressource/{id}): param -> id, FullDTO ; return -> ResponseEntity<BasicDTO>
-DELETE(ressource/{id}): param -> id ; return -> ResponseEntity<BasicDTO>
-
-### Images
-
-[image](screenshots/[name] "hover")
+```
+ GET /current-accounts/{id}
+```
+Accède aux détails du **Compte Courant** identifié (si appartient au **Client** connecté)
 
 ### Fonctionnalitées
 
 #### Fait
 
-* Func 1
-* Func 2
-	* Func 2.1
-	* Func 2.2
+- Concevoir la base de donnée (MCD, MPD, MDD)
+- Implémenter la partie business
+- Implémenter les endpoints
+- Mettre en place la sécurité (JWT, CORS)
 
 #### En cours
 
+- Ajouter les règles de validations des DTO
+- Gérer les exceptions et le feedback pour l'utilisateur
+
 #### À faire / Souhaitées (Idées)
+
+- Tester les endpoints
+- Corriger la securité CSRF
+- Mettre en place le endpoints '/authenticate', pour valider les identifiants données et poursuivre avec JWT (plutot que /client)
+- Écrire la documentation
+- Mettre en place la feature "Budget"
 
 ## Utilisation
 
@@ -88,11 +102,10 @@ DELETE(ressource/{id}): param -> id ; return -> ResponseEntity<BasicDTO>
     <tr><th colspan="2">Environnement Technique</th></tr>
   </thead>
   <tbody>
-    <tr><td><b>SGBD</b></td><td></td></tr>
-    <tr><td><b>Langage</b></td><td></td></tr>
-    <tr><td><b>Technologies/Logiciels</b></td><td></td></tr>
-    <tr><td><b>Normes & architectures</b></td><td></td></tr>
-	<tr><td><b>Méthodes</b></td><td></td></tr>
+    <tr><td><b>SGBD</b></td><td>MySQL</td></tr>
+    <tr><td><b>Langage</b></td><td>Java</td></tr>
+    <tr><td><b>Technologies/Logiciels</b></td><td>Spring</td></tr>
+    <tr><td><b>Normes & architectures</b></td><td>3-Tiers, Rest, JWT</td></tr>
   </tbody>
 </table>
 

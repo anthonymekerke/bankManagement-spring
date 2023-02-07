@@ -2,8 +2,11 @@ package com.example.BankManagement.business.dto;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
 public class TransactionFullDTO extends TransactionBasicDTO{
     
+    @NotNull
     private AccountBasicDTO account;
 
     public TransactionFullDTO() {
