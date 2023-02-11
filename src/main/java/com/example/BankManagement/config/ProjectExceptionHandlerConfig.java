@@ -14,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.example.BankManagement.exception.NotFoundException;
 import com.example.BankManagement.exception.UnauthorizedException;
 
 @RestControllerAdvice
@@ -32,6 +33,12 @@ public class ProjectExceptionHandlerConfig {
     }
     
     @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<Map<String, List<String>>> handleUnauthorizedException(UnauthorizedException ex) {
+        List<String> errors = Collections.singletonList(ex.getMessage());
+        return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<Map<String, List<String>>> handleNotFoundException(UnauthorizedException ex) {
         List<String> errors = Collections.singletonList(ex.getMessage());
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
