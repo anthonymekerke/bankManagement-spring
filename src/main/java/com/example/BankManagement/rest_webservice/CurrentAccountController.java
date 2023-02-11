@@ -5,31 +5,21 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.BankManagement.business.dto.CurrentAccountBasicDTO;
 import com.example.BankManagement.business.service.IAccountService;
-import com.example.BankManagement.exception.BankManagementBusinessException;
 import com.example.BankManagement.util.AppConstants;
 
-/*
- * /current-accounts/{id} -> show details of the current account
- */
 @RestController
-@RequestMapping(value = "/current-accounts")
 public class CurrentAccountController {
     
     @Autowired
     @Qualifier(AppConstants.CURRENT_ACCOUNT_TYPE)
     private IAccountService accountService;
 
-    @GetMapping("/{id}")
+    @GetMapping("/current-accounts/{id}")
     public CurrentAccountBasicDTO getCurrentAccountsId(@PathVariable(value="id")int id,Authentication authentication){
-        try {
-            return (CurrentAccountBasicDTO)accountService.readByIdAndClientLogin(id, authentication.getName());
-        } catch (BankManagementBusinessException e) {
-            return null;
-        }
+        return (CurrentAccountBasicDTO)accountService.readByIdAndClientLogin(id, authentication.getName());
     }
 }
