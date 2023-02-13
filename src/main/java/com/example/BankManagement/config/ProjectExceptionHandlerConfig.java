@@ -14,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.example.BankManagement.exception.InternalServerErrorException;
 import com.example.BankManagement.exception.NotFoundException;
 import com.example.BankManagement.exception.UnauthorizedException;
 
@@ -42,6 +43,12 @@ public class ProjectExceptionHandlerConfig {
     public ResponseEntity<Map<String, List<String>>> handleNotFoundException(UnauthorizedException ex) {
         List<String> errors = Collections.singletonList(ex.getMessage());
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(InternalServerErrorException.class)
+    public ResponseEntity<Map<String, List<String>>> handleInternalServerErrorException(InternalServerErrorException ex) {
+        List<String> errors = Collections.singletonList(ex.getMessage());
+        return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

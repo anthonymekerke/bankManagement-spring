@@ -14,5 +14,5 @@ public interface IAccountService {
     TransactionFullDTO createTransactionByAccountIdAndClientLogin(TransactionFullDTO dto, int account_id, String client_login) throws UnauthorizedException;
 
     AccountBasicDTO readByIdAndClientLogin(int account_id, String client_login) throws UnauthorizedException;
-    List<AccountBasicDTO> readByClientLogin(String client_login) throws NotFoundException;   
+    List<AccountBasicDTO> readByClientLogin(String client_login) throws NotFoundException;
 }

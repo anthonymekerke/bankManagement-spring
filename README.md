@@ -52,14 +52,14 @@ Accède au détails du **Compte** identifié (si appartient au **Client** connec
 Accède à l'ensemble des **Transaction** du **Compte** identifié (si appartient au **Client** connecté)
 
 ```
- POST /transactions
+ POST /accounts/{id}/transactions
 ```
-Créée une nouvelle **Transaction** pour le client connecté
+Créée une nouvelle **Transaction** associée au **Compte** identifé (si appartient au **Client** connecté)
 
 ```
- GET /transactions/{id}
+ GET /accounts/{ac_id}/transactions/{tr_id}
 ```
-Accède aux détails de la **Transaction** identifié (si appartient au **Client** connecté)
+Accède au détails de la **Transaction** identifié associée au **Compte** identifié (si appartient au **Client** connecté)
 
 ```
  GET /saving-accounts/{id}
@@ -92,6 +92,8 @@ Accède aux détails du **Compte Courant** identifié (si appartient au **Client
 - Mettre en place le endpoints '/authenticate', pour valider les identifiants données et poursuivre avec JWT (plutot que /client)
 - Écrire la documentation
 - Mettre en place la feature "Budget"
+- Mettre en place la norme HATEOAS ?
+- Transformer l'application monolithe en microservices
 
 ## Utilisation
 

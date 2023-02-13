@@ -17,6 +17,7 @@ import com.example.BankManagement.business.repository.IAccountRepository;
 import com.example.BankManagement.business.repository.ICurrentAccountRepository;
 import com.example.BankManagement.business.repository.ISavingAccountRepository;
 import com.example.BankManagement.business.repository.ITransactionRepository;
+import com.example.BankManagement.exception.InternalServerErrorException;
 import com.example.BankManagement.exception.NotFoundException;
 import com.example.BankManagement.exception.UnauthorizedException;
 import com.example.BankManagement.util.AppConstants;
@@ -48,7 +49,7 @@ public class AccountServiceImpl implements IAccountService{
     public AccountBasicDTO readByIdAndClientLogin(int account_id, String client_login) throws UnauthorizedException{
         Account entity = accountRepository.findByIdAndClient_Login(account_id, client_login).orElse(null);
         if(entity == null){throw new UnauthorizedException("Account n°" + account_id + " not owned by this client.");}
-        return DTOConverter.CoreAccountEntitytoBasicDTO(entity, readAccountType(account_id), readBalance(account_id));
+        return DTOConverter.CoreAccountEntitytoBasicDTO(entity, readAccountTypeById(account_id), readBalance(account_id));
     }
 
     @Override
@@ -56,7 +57,7 @@ public class AccountServiceImpl implements IAccountService{
         List<Account> entities = accountRepository.findByClient_Login(client_login);
         if(entities.size() == 0){throw new NotFoundException("No Accounts found for this Client");}
         return entities.stream()
-                .map(entity -> DTOConverter.CoreAccountEntitytoBasicDTO(entity, readAccountType(entity.getId()), readBalance(entity.getId())))
+                .map(entity -> DTOConverter.CoreAccountEntitytoBasicDTO(entity, readAccountTypeById(entity.getId()), readBalance(entity.getId())))
                 .collect(Collectors.toList());
     }
 
@@ -79,7 +80,7 @@ public class AccountServiceImpl implements IAccountService{
     }
 
     /*
-     * TODO: Handle case when given account and path account id don't match
+     * TODO: modify FullDTO to BasicDTO
      */
     @Override
     public TransactionFullDTO createTransactionByAccountIdAndClientLogin(TransactionFullDTO dto, int account_id,
@@ -113,17 +114,7 @@ public class AccountServiceImpl implements IAccountService{
         return dto;
     }
 
-    /*
-     * TODO: Issue In case of value date in future. 
-     *  - Maybe replace with execution date ?
-     *  - Maybe set balance to zero ?
-     *  - Use a microservice to handle future transaction ?
-     */
-    private Transaction getLastTransactionByAccountId(int account_id){
-        return transactionRepository.findFirstByAccountIdOrderByValueDateDesc(account_id).orElse(null);
-    }
-
-    private String readAccountType(int account_id){
+    private String readAccountTypeById(int account_id) throws InternalServerErrorException{
         if(savingAccountRepository.existsById(account_id)){
             return AppConstants.SAVING_ACCOUNT_TYPE;
         }
@@ -132,7 +123,17 @@ public class AccountServiceImpl implements IAccountService{
             return AppConstants.CURRENT_ACCOUNT_TYPE;
         }
 
-        return null;
+        throw new InternalServerErrorException("Internal error with an unknown Account type");
+    }
+
+    /*
+     * TODO: Issue In case of value date in future. 
+     *  - Maybe replace with execution date ?
+     *  - Maybe set balance to zero ?
+     *  - Use a microservice to handle future transaction ?
+     */
+    private Transaction getLastTransactionByAccountId(int account_id){
+        return transactionRepository.findFirstByAccountIdOrderByValueDateDesc(account_id).orElse(null);
     }
 
     protected float readBalance(int account_id){
