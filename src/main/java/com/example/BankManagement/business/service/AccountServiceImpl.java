@@ -2,6 +2,7 @@ package com.example.BankManagement.business.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.BankManagement.business.dto.AccountBasicDTO;
 import com.example.BankManagement.business.dto.TransactionBasicDTO;
-import com.example.BankManagement.business.dto.TransactionFullDTO;
 import com.example.BankManagement.business.entity.Account;
 import com.example.BankManagement.business.entity.Transaction;
 import com.example.BankManagement.business.repository.IAccountRepository;
@@ -66,7 +66,7 @@ public class AccountServiceImpl implements IAccountService{
         List<Transaction> entities = transactionRepository.findByAccount_IdAndAccount_Client_Login(account_id, client_login);
         if(entities.size() == 0){throw new NotFoundException("No transactions found for this Account");}
         return entities.stream()
-                .map(entity -> DTOConverter.TransactionEntitytoBasicDTO(entity))
+                .map(entity -> DTOConverter.EntitytoBasicDTO(entity))
                 .collect(Collectors.toList());
     }
 
@@ -76,14 +76,14 @@ public class AccountServiceImpl implements IAccountService{
 
         Transaction entity = transactionRepository.findByIdAndAccount_IdAndAccount_Client_Login(transaction_id, account_id, client_login).orElse(null);
         if(entity == null) {throw new UnauthorizedException("The Transaction["+transaction_id+"] is not owned by this client or doesn't exist");}
-        return DTOConverter.TransactionEntitytoBasicDTO(entity);
+        return DTOConverter.EntitytoBasicDTO(entity);
     }
 
     /*
-     * TODO: modify FullDTO to BasicDTO
+     * TODO: Test if converions from FullDTO to BasicDTO is correct
      */
     @Override
-    public TransactionFullDTO createTransactionByAccountIdAndClientLogin(TransactionFullDTO dto, int account_id,
+    public TransactionBasicDTO createTransactionByAccountIdAndClientLogin(TransactionBasicDTO dto, int account_id,
             String client_login) throws UnauthorizedException {
         
         Transaction entity = getLastTransactionByAccountId(account_id);
@@ -92,8 +92,8 @@ public class AccountServiceImpl implements IAccountService{
         ///////////////////////////////////////////////
         // Check if connected client own the account //
         ///////////////////////////////////////////////
-        boolean exist = transactionRepository.existsByAccount_IdAndAccount_Client_Login(account_id, client_login);
-        if(!exist){
+        Optional<Account> account = accountRepository.findByIdAndClient_Login(account_id, client_login);
+        if(account.isEmpty()){
             throw new UnauthorizedException("The Account["+account_id+"] is not owned by connected client");
         }
 
@@ -108,7 +108,8 @@ public class AccountServiceImpl implements IAccountService{
         ///////////////////////////////////////////
         // convert DTO to entity & save it in DB //
         ///////////////////////////////////////////
-        entity = DTOConverter.TransactionFullDTOtoEntity(dto);
+        entity = DTOConverter.BasicDTOtoEntity(dto);
+        entity.setAccount(account.get());
         entity = this.transactionRepository.save(entity);
         dto.setId(entity.getId());
         return dto;

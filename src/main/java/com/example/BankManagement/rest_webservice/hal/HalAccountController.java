@@ -25,7 +25,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.BankManagement.business.dto.AccountBasicDTO;
 import com.example.BankManagement.business.dto.TransactionBasicDTO;
-import com.example.BankManagement.business.dto.TransactionFullDTO;
 import com.example.BankManagement.business.service.IAccountService;
 import com.example.BankManagement.rest_webservice.hal.modelAssembler.AccountModelAssembler;
 import com.example.BankManagement.rest_webservice.hal.modelAssembler.TransactionModelAssembler;
@@ -67,11 +66,11 @@ public class HalAccountController {
     }
 
     /*
-     * TODO: Maybe separate payment & withdraw into 2 separate endpoints
-     * Allow hypermedia interaction, see: https://en.wikipedia.org/wiki/HATEOAS
+     * TODO: Maybe separate payment & withdraw into 2 separate endpoints to
+     * allow hypermedia interaction, see: https://en.wikipedia.org/wiki/HATEOAS
      */
     @PostMapping("/accounts/{id}/transactions")
-    public ResponseEntity<?> postTransaction(@Valid @RequestBody TransactionFullDTO dto, @PathVariable("id") int account_id, Authentication authentication) {
+    public ResponseEntity<?> postTransaction(@Valid @RequestBody TransactionBasicDTO dto, @PathVariable("id") int account_id, Authentication authentication) {
         dto = accountService.createTransactionByAccountIdAndClientLogin(dto, account_id, authentication.getName());
         
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()

@@ -18,7 +18,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.BankManagement.business.dto.AccountBasicDTO;
 import com.example.BankManagement.business.dto.TransactionBasicDTO;
-import com.example.BankManagement.business.dto.TransactionFullDTO;
 import com.example.BankManagement.business.service.IAccountService;
 import com.example.BankManagement.util.AppConstants;
 
@@ -35,7 +34,7 @@ public class AccountController {
     }
 
     @PostMapping("/accounts/{id}/transactions")
-    public ResponseEntity<?> postTransaction(@Valid @RequestBody TransactionFullDTO dto, @PathVariable("id") int account_id, Authentication authentication) {
+    public ResponseEntity<?> postTransaction(@Valid @RequestBody TransactionBasicDTO dto, @PathVariable("id") int account_id, Authentication authentication) {
         dto = accountService.createTransactionByAccountIdAndClientLogin(dto, account_id, authentication.getName());
 
         /*

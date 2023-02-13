@@ -19,7 +19,7 @@ public class ClientServiceImpl implements IClientService{
     public ClientBasicDTO readClientByLogin(String client_login) throws NotFoundException{
         Client entity = clientRepository.findByLogin(client_login).orElse(null);
         if(entity == null) {throw new NotFoundException("Erreur normalement impossible!");}
-        return DTOConverter.ClientEntitytoBasicDTO(entity);
+        return DTOConverter.EntitytoBasicDTO(entity);
     }
     
 }
