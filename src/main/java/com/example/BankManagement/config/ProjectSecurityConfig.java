@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,9 +24,37 @@ import com.example.BankManagement.util.SecurityConstants;
 @Configuration
 public class ProjectSecurityConfig {
 
-
+    /*
+     * Development mode:
+     * Default Security configuration
+     */
+    @Profile("defaultsecure")
     @Bean
 	SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests().anyRequest().authenticated().and().csrf().disable().httpBasic().and().formLogin();
+
+        return http.build();
+    }
+
+    /*
+     * Development mode:
+     * All Security Disabled
+     */
+    @Profile("unsecured")
+    @Bean
+	SecurityFilterChain disabledSecurityFilterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests().anyRequest().permitAll().and().csrf().disable().httpBasic().and().formLogin();
+
+        return http.build();
+    }
+
+    /*
+     * Deploy mode:
+     * Custom configuration with JWT authentication, CORS & CSRF
+     */
+    @Profile("deploy")
+    @Bean
+	SecurityFilterChain deploySecurityFilterChain(HttpSecurity http) throws Exception {
 
         http
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()

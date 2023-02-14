@@ -40,7 +40,7 @@ public class ProjectExceptionHandlerConfig {
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<Map<String, List<String>>> handleNotFoundException(UnauthorizedException ex) {
+    public ResponseEntity<Map<String, List<String>>> handleNotFoundException(NotFoundException ex) {
         List<String> errors = Collections.singletonList(ex.getMessage());
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
