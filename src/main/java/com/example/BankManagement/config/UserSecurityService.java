@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,8 +17,11 @@ import com.example.BankManagement.business.repository.IClientRepository;
 @Service
 public class UserSecurityService implements UserDetailsService{
 
-    @Autowired
     private IClientRepository clientRepository;
+
+    public UserSecurityService(IClientRepository clientRepository){
+        this.clientRepository = clientRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

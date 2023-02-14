@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -34,15 +33,18 @@ import com.example.BankManagement.util.AppConstants;
 @RequestMapping("/HAL")
 public class HalAccountController {
 
-    @Autowired
-    @Qualifier(AppConstants.CORE_ACCOUNT_TYPE)
     private IAccountService accountService;
-
-    @Autowired
     private TransactionModelAssembler transactionAssembler;
-
-    @Autowired
     private AccountModelAssembler accountModelAssembler;
+
+    public HalAccountController(
+        @Qualifier(AppConstants.CORE_ACCOUNT_TYPE) IAccountService accountService,
+        TransactionModelAssembler transactionModelAssembler,
+        AccountModelAssembler accountModelAssembler){
+        this.accountModelAssembler = accountModelAssembler;
+        this.accountService = accountService;
+        this.transactionAssembler = transactionModelAssembler;
+    }
 
     @GetMapping("/accounts/{ac_id}/transactions/{tr_id}")
     public EntityModel<TransactionBasicDTO> getTransactionId(@PathVariable("ac_id") int ac_id, @PathVariable("tr_id")int tr_id, Authentication authentication) {

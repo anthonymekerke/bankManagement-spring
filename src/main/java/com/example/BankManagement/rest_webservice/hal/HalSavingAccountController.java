@@ -1,6 +1,5 @@
 package com.example.BankManagement.rest_webservice.hal;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.security.core.Authentication;
@@ -17,12 +16,16 @@ import com.example.BankManagement.util.AppConstants;
 @RestController
 @RequestMapping("/HAL")
 public class HalSavingAccountController {
-    @Autowired
-    @Qualifier(AppConstants.SAVING_ACCOUNT_TYPE)
-    private IAccountService accountService;
 
-    @Autowired
+    private IAccountService accountService;
     private SavingAccountModelAssembler modelAssembler;
+
+    public HalSavingAccountController(
+        @Qualifier(AppConstants.SAVING_ACCOUNT_TYPE) IAccountService accountService,
+        SavingAccountModelAssembler modelAssembler){
+        this.accountService = accountService;
+        this.modelAssembler = modelAssembler;
+    }
 
     @GetMapping("/saving-accounts/{id}")
     public EntityModel<SavingAccountBasicDTO> getCurrentAccountsId(@PathVariable(value="id")int id,Authentication authentication){

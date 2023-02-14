@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -24,9 +23,12 @@ import com.example.BankManagement.util.AppConstants;
 @RestController
 public class AccountController {
 
-    @Autowired
-    @Qualifier(AppConstants.CORE_ACCOUNT_TYPE)
     private IAccountService accountService;
+
+    public AccountController(
+        @Qualifier(AppConstants.CORE_ACCOUNT_TYPE) IAccountService accountService){
+        this.accountService = accountService;
+    }
 
     @GetMapping("/accounts/{ac_id}/transactions/{tr_id}")
     public TransactionBasicDTO getTransactionId(@PathVariable("ac_id") int ac_id, @PathVariable("tr_id")int tr_id, Authentication authentication) {

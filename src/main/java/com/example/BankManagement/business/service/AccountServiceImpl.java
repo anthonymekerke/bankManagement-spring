@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -23,27 +22,24 @@ import com.example.BankManagement.exception.UnauthorizedException;
 import com.example.BankManagement.util.AppConstants;
 import com.example.BankManagement.util.DTOConverter;
 
-/*
- * WARNING: Since @OneToMany attributes are FetchType.LAZY by default,
- * if you want to get access to those attributes, you got to annotate
- * the method calling the .get<Attributes> with javax.transaction.Transactional
- * in order to read them.
- */
 @Service
 @Qualifier(AppConstants.CORE_ACCOUNT_TYPE)
 public class AccountServiceImpl implements IAccountService{
 
-    @Autowired
     protected IAccountRepository accountRepository;
-    
-    @Autowired
     protected ISavingAccountRepository savingAccountRepository;
-
-    @Autowired
     protected ICurrentAccountRepository currentAccountRepository;
-
-    @Autowired
     protected ITransactionRepository transactionRepository;
+
+    public AccountServiceImpl(IAccountRepository accountRepository,
+        ISavingAccountRepository savingAccountRepository,
+        ICurrentAccountRepository currentAccountRepository,
+        ITransactionRepository transactionRepository){
+            this.accountRepository = accountRepository;
+            this.currentAccountRepository = currentAccountRepository;
+            this.savingAccountRepository = savingAccountRepository;
+            this.transactionRepository = transactionRepository;
+        }
 
     @Override
     public AccountBasicDTO readByIdAndClientLogin(int account_id, String client_login) throws UnauthorizedException{
@@ -79,9 +75,6 @@ public class AccountServiceImpl implements IAccountService{
         return DTOConverter.EntitytoBasicDTO(entity);
     }
 
-    /*
-     * TODO: Test if converions from FullDTO to BasicDTO is correct
-     */
     @Override
     public TransactionBasicDTO createTransactionByAccountIdAndClientLogin(TransactionBasicDTO dto, int account_id,
             String client_login) throws UnauthorizedException {

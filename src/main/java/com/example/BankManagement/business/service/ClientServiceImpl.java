@@ -1,6 +1,5 @@
 package com.example.BankManagement.business.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.BankManagement.business.dto.ClientBasicDTO;
@@ -12,8 +11,11 @@ import com.example.BankManagement.util.DTOConverter;
 @Service
 public class ClientServiceImpl implements IClientService{
 
-    @Autowired
     IClientRepository clientRepository;
+
+    public ClientServiceImpl(IClientRepository clientRepository){
+        this.clientRepository = clientRepository;
+    }
 
     @Override
     public ClientBasicDTO readClientByLogin(String client_login) throws NotFoundException{
