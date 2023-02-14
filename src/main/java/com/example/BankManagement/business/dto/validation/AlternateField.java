@@ -1,4 +1,4 @@
-package com.example.BankManagement.validation;
+package com.example.BankManagement.business.dto.validation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.RetentionPolicy;

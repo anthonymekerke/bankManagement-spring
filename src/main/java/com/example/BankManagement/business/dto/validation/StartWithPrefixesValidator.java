@@ -1,4 +1,4 @@
-package com.example.BankManagement.validation;
+package com.example.BankManagement.business.dto.validation;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

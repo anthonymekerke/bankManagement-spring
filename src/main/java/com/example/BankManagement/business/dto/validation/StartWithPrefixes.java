@@ -1,4 +1,4 @@
-package com.example.BankManagement.validation;
+package com.example.BankManagement.business.dto.validation;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.FIELD;

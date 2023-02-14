@@ -6,8 +6,8 @@ import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 
-import com.example.BankManagement.validation.AlternateField;
-import com.example.BankManagement.validation.StartWithPrefixes;
+import com.example.BankManagement.business.dto.validation.AlternateField;
+import com.example.BankManagement.business.dto.validation.StartWithPrefixes;
 
 @AlternateField(firstField = "withdraw", secondField = "payment")
 public class TransactionBasicDTO implements IDTO{
