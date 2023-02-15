@@ -1,4 +1,4 @@
-package com.example.BankManagement.config;
+package com.example.BankManagement.business.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +14,12 @@ import org.springframework.stereotype.Service;
 import com.example.BankManagement.business.entity.Client;
 import com.example.BankManagement.business.repository.IClientRepository;
 
-//@Service
-public class UserSecurityService implements UserDetailsService{
+@Service
+public class JpaUserDetailsService implements UserDetailsService{
 
     private IClientRepository clientRepository;
 
-    public UserSecurityService(IClientRepository clientRepository){
+    public JpaUserDetailsService(IClientRepository clientRepository){
         this.clientRepository = clientRepository;
     }
 

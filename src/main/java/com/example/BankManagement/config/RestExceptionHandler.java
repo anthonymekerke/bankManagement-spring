@@ -19,7 +19,7 @@ import com.example.BankManagement.exception.NotFoundException;
 import com.example.BankManagement.exception.UnauthorizedException;
 
 @RestControllerAdvice
-public class ProjectExceptionHandlerConfig {
+public class RestExceptionHandler {
     
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<Map<String, List<String>>> handleGeneralExceptions(Exception ex) {
