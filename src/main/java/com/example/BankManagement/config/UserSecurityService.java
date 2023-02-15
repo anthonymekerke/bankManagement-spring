@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import com.example.BankManagement.business.entity.Client;
 import com.example.BankManagement.business.repository.IClientRepository;
 
-@Service
+//@Service
 public class UserSecurityService implements UserDetailsService{
 
     private IClientRepository clientRepository;
