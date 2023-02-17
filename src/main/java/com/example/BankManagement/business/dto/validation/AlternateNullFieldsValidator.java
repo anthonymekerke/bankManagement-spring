@@ -5,17 +5,17 @@ import javax.validation.ConstraintValidatorContext;
 
 import org.springframework.beans.BeanWrapperImpl;
 
-public class AlternateFieldValidator implements ConstraintValidator<AlternateField, Object>{
+public class AlternateNullFieldsValidator implements ConstraintValidator<AlternateNullFields, Object>{
     
     private String message;
     private String firstField;
     private String secondField;
 
     @Override
-    public void initialize(final AlternateField constraintAnnotation) {
+    public void initialize(final AlternateNullFields constraintAnnotation) {
         this.message = constraintAnnotation.message();
-        this.firstField = constraintAnnotation.firstField();
-        this.secondField = constraintAnnotation.secondField();
+        this.firstField = constraintAnnotation.first();
+        this.secondField = constraintAnnotation.second();
     }
 
     @Override

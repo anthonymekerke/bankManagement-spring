@@ -75,6 +75,12 @@ public class AccountServiceImpl implements IAccountService{
         return DTOConverter.EntitytoBasicDTO(entity);
     }
 
+    /*
+     * When value date is in future, the balance is set to 'null'.
+     * 
+     * TODO: Find a way to trigger computing of Transaction balance when value date is passed.
+     *  - Maybe use a microservice to handle future transaction ? 
+     */
     @Override
     public TransactionBasicDTO createTransactionByAccountIdAndClientLogin(TransactionBasicDTO dto, int account_id,
             String client_login) throws UnauthorizedException {
@@ -90,12 +96,24 @@ public class AccountServiceImpl implements IAccountService{
             throw new UnauthorizedException("The Account["+account_id+"] is not owned by connected client");
         }
 
-        ///////////////////////////////////////////
-        // Compute field executionDate & balance //
-        ///////////////////////////////////////////
+        /////////////////////
+        // Compute balance //
+        /////////////////////
         if(entity != null){prevBalance = entity.getBalance();}
         nextBalance = dto.getPayment() != null ? prevBalance + dto.getPayment() : prevBalance - dto.getWithdraw();
-        dto.setBalance(nextBalance);
+
+        /////////////////////////////////
+        // Set the given 'null' fields //
+        /////////////////////////////////
+        if(dto.getValueDate() != null){
+            dto.setBalance(null);
+        }
+
+        if(dto.getValueDate() == null){
+            dto.setBalance(nextBalance);
+            dto.setValueDate(new Date());
+        }
+
         dto.setExecutionDate(new Date());
 
         ///////////////////////////////////////////
@@ -120,14 +138,8 @@ public class AccountServiceImpl implements IAccountService{
         throw new InternalServerErrorException("Internal error with an unknown Account type");
     }
 
-    /*
-     * TODO: Issue In case of value date in future. 
-     *  - Maybe replace with execution date ?
-     *  - Maybe set balance to zero ?
-     *  - Use a microservice to handle future transaction ?
-     */
     private Transaction getLastTransactionByAccountId(int account_id){
-        return transactionRepository.findFirstByAccountIdOrderByValueDateDesc(account_id).orElse(null);
+        return transactionRepository.findFirstByAccountIdAndBalanceNotNullOrderByValueDateDesc(account_id).orElse(null);
     }
 
     protected float readBalance(int account_id){

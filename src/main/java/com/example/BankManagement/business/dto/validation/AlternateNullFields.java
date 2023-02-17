@@ -18,12 +18,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Retention(RUNTIME)
 @Target(ElementType.TYPE)
-@Constraint(validatedBy = AlternateFieldValidator.class)
-public @interface AlternateField {
+@Constraint(validatedBy = AlternateNullFieldsValidator.class)
+public @interface AlternateNullFields {
 
     String message() default "first & second field not valid";
-    String firstField();
-    String secondField();
+    String first();
+    String second();
 
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
@@ -35,7 +35,7 @@ public @interface AlternateField {
     @Retention(RetentionPolicy.RUNTIME)
     @interface List {
 
-        AlternateField[] value();
+        AlternateNullFields[] value();
 
     }
 
