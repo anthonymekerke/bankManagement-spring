@@ -50,7 +50,6 @@ public class SecurityConfig {
      * Development mode:
      * Default Security configuration
      */
-    @Profile("defaultsecure")
     @Bean
 	SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests().anyRequest().authenticated().and().csrf().disable().httpBasic().and().formLogin();
