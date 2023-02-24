@@ -1,5 +1,18 @@
 # BankManagement - BACKEND
 
+required dependencies:
+- Config Client
+- Spring Web
+- Spring Devtools
+- Spring Actuator
+
+Custom dependencies:
+- Spring HATEOAS
+- MySQL Driver
+- Spring Data JPA
+- Spring Security | Oauth Server 2
+- Validation
+
 ## Description
 
 ### Contexte
@@ -32,9 +45,9 @@ Période: Octobre 2022 - Janvier 2023
 **Liste des URI (endpoints):**
 
 ```
- GET /authenticate
+ POST /authenticate
 ```
-Sert à l'authentification d'un utilisateur. Lorsque les identifiants fournies sont validés, l'authentification se fait par la suite à l'aide d'un jeton JWT.
+Sert à l'authentification d'un utilisateur. Lorsque les identifiants fournies (HTTP Header -> Authorization: Basic \<username:password\>) sont validés, l'authentification se fait par la suite à l'aide d'un jeton JWT (HTTP Header -> Authorization: Bearer \<token\>).
 
 ```
  GET /accounts
@@ -79,21 +92,22 @@ Accède aux détails du **Compte Courant** identifié (si appartient au **Client
 - Implémenter la partie business
 - Implémenter les endpoints
 - Mettre en place la sécurité (JWT, CORS)
+- Ajouter les règles de validations des DTO
+- Gérer les exceptions et le feedback pour l'utilisateur
+- Mettre en place l'authentification
 
 #### En cours
 
-- Ajouter les règles de validations des DTO
-- Gérer les exceptions et le feedback pour l'utilisateur
+- Transformer l'application monolithe en microservices
 
 #### À faire / Souhaitées (Idées)
 
 - Tester les endpoints
+- Test unitaires
 - Corriger la securité CSRF
-- Mettre en place le endpoints '/authenticate', pour valider les identifiants données et poursuivre avec JWT (plutot que /client)
 - Écrire la documentation
 - Mettre en place la feature "Budget"
-- Mettre en place la norme HATEOAS ?
-- Transformer l'application monolithe en microservices
+- Mettre en place une navigation "hypermedia-driven" ?
 
 ## Utilisation
 
@@ -105,19 +119,15 @@ Accède aux détails du **Compte Courant** identifié (si appartient au **Client
   </thead>
   <tbody>
     <tr><td><b>SGBD</b></td><td>MySQL</td></tr>
-    <tr><td><b>Langage</b></td><td>Java</td></tr>
-    <tr><td><b>Technologies/Logiciels</b></td><td>Spring</td></tr>
+    <tr><td><b>Langage</b></td><td>Java 11</td></tr>
+    <tr><td><b>Technologies/Logiciels</b></td><td>Spring 2.7, Maven 3.0</td></tr>
     <tr><td><b>Normes & architectures</b></td><td>3-Tiers, Rest, JWT</td></tr>
   </tbody>
 </table>
 
 ### Installation / Compilation
 
-```bash
-git clone "nom du depot"
-```
-
-### Lancement (run)
+### Lancement
 
 #### Help
 

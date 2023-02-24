@@ -1,8 +1,8 @@
 ## custom
-src/main/java/com/example/BankManagement/test/
 
 HELP.md
 target/
+**/src/main/**/test
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
