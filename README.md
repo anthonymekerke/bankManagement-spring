@@ -8,6 +8,7 @@
 |---|---|
 | Config Server | 8888 |
 | Naming Server | 8761 |
+| API Gateway | 8765 |
 | Account Service | 8080 |
 
 ### Initializr
