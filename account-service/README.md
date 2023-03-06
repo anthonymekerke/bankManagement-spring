@@ -2,6 +2,7 @@
 
 required dependencies:
 - Config Client
+- Eureka Discovery Client
 - Spring Web
 - Spring Devtools
 - Spring Actuator
