@@ -21,12 +21,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import bankManagement.accountService.business.entity.Account;
-import bankManagement.accountService.business.entity.Client;
-import bankManagement.accountService.business.entity.Transaction;
-import bankManagement.accountService.business.repository.IAccountRepository;
-import bankManagement.accountService.business.repository.IClientRepository;
-import bankManagement.accountService.business.repository.ITransactionRepository;
+import bankManagement.accountService.domain.Account;
+import bankManagement.accountService.domain.Client;
+import bankManagement.accountService.domain.Transaction;
+import bankManagement.accountService.repository.IAccountRepository;
+import bankManagement.accountService.repository.IClientRepository;
+import bankManagement.accountService.repository.ITransactionRepository;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest

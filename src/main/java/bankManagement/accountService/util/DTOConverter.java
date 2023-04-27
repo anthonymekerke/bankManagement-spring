@@ -2,14 +2,14 @@ package bankManagement.accountService.util;
 
 import org.springframework.beans.BeanUtils;
 
-import bankManagement.accountService.business.dto.AccountBasicDTO;
-import bankManagement.accountService.business.dto.ClientBasicDTO;
-import bankManagement.accountService.business.dto.CurrentAccountBasicDTO;
-import bankManagement.accountService.business.dto.SavingAccountBasicDTO;
-import bankManagement.accountService.business.dto.TransactionBasicDTO;
-import bankManagement.accountService.business.entity.Account;
-import bankManagement.accountService.business.entity.Client;
-import bankManagement.accountService.business.entity.Transaction;
+import bankManagement.accountService.domain.Account;
+import bankManagement.accountService.domain.AccountBasicDTO;
+import bankManagement.accountService.domain.Client;
+import bankManagement.accountService.domain.ClientBasicDTO;
+import bankManagement.accountService.domain.CurrentAccountBasicDTO;
+import bankManagement.accountService.domain.SavingAccountBasicDTO;
+import bankManagement.accountService.domain.Transaction;
+import bankManagement.accountService.domain.TransactionBasicDTO;
 
 public class DTOConverter {
     
