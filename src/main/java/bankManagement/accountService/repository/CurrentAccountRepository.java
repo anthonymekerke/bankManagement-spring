@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import bankManagement.accountService.domain.CurrentAccount;
 
 @Repository
-public interface ICurrentAccountRepository extends JpaRepository<CurrentAccount, Integer>{
+public interface CurrentAccountRepository extends JpaRepository<CurrentAccount, Integer>{
 
     Optional<CurrentAccount> findByIdAndClient_Login(Integer id, String client_login);
 }

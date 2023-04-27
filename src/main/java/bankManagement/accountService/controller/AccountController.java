@@ -15,28 +15,29 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import bankManagement.accountService.domain.AccountBasicDTO;
-import bankManagement.accountService.domain.TransactionBasicDTO;
-import bankManagement.accountService.service.IAccountService;
+import bankManagement.accountService.domain.AccountResponse;
+import bankManagement.accountService.domain.TransactionResponse;
+import bankManagement.accountService.service.AccountService;
 import bankManagement.accountService.util.AppConstants;
 
 @RestController
 public class AccountController {
 
-    private IAccountService accountService;
+    private AccountService accountService;
 
     public AccountController(
-        @Qualifier(AppConstants.CORE_ACCOUNT_TYPE) IAccountService accountService){
+        @Qualifier(AppConstants.CORE_ACCOUNT_TYPE) AccountService accountService
+    ) {
         this.accountService = accountService;
     }
 
     @GetMapping("/accounts/{ac_id}/transactions/{tr_id}")
-    public TransactionBasicDTO getTransactionId(@PathVariable("ac_id") int ac_id, @PathVariable("tr_id")int tr_id, Authentication authentication) {
+    public TransactionResponse getTransactionId(@PathVariable("ac_id") int ac_id, @PathVariable("tr_id")int tr_id, Authentication authentication) {
         return accountService.readTransactionByIdAndClientLogin(ac_id, tr_id, authentication.getName());
     }
 
     @PostMapping("/accounts/{id}/transactions")
-    public ResponseEntity<?> postTransaction(@Valid @RequestBody TransactionBasicDTO dto, @PathVariable("id") int account_id, Authentication authentication) {
+    public ResponseEntity<?> postTransaction(@Valid @RequestBody TransactionResponse dto, @PathVariable("id") int account_id, Authentication authentication) {
         dto = accountService.createTransactionByAccountIdAndClientLogin(dto, account_id, authentication.getName());
 
         /*
@@ -52,17 +53,17 @@ public class AccountController {
     }
 
     @GetMapping("/accounts/{id}/transactions")
-    public List<TransactionBasicDTO> getAccountsIdTransactions(@PathVariable(value="id") int id, Authentication authentication){
+    public List<TransactionResponse> getAccountsIdTransactions(@PathVariable(value="id") int id, Authentication authentication){
         return this.accountService.readTransactionByAccountIdAndClientLogin(id, authentication.getName());
     }
 
     @GetMapping("/accounts/{id}")
-    public AccountBasicDTO getAccountsId(@PathVariable(value = "id") int id, Authentication authentication){
+    public AccountResponse getAccountsId(@PathVariable(value = "id") int id, Authentication authentication){
         return this.accountService.readByIdAndClientLogin(id, authentication.getName());
     }
 
     @GetMapping("/accounts")
-    public List<AccountBasicDTO> getAccounts(Authentication authentication){
+    public List<AccountResponse> getAccounts(Authentication authentication){
         return this.accountService.readByClientLogin(authentication.getName());
     }
 }

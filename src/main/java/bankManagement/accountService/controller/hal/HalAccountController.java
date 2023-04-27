@@ -24,42 +24,43 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import bankManagement.accountService.controller.hal.modelAssembler.AccountModelAssembler;
 import bankManagement.accountService.controller.hal.modelAssembler.TransactionModelAssembler;
-import bankManagement.accountService.domain.AccountBasicDTO;
-import bankManagement.accountService.domain.TransactionBasicDTO;
-import bankManagement.accountService.service.IAccountService;
+import bankManagement.accountService.domain.AccountResponse;
+import bankManagement.accountService.domain.TransactionResponse;
+import bankManagement.accountService.service.AccountService;
 import bankManagement.accountService.util.AppConstants;
 
 @RestController
 @RequestMapping("/HAL")
 public class HalAccountController {
 
-    private IAccountService accountService;
+    private AccountService accountService;
     private TransactionModelAssembler transactionAssembler;
     private AccountModelAssembler accountModelAssembler;
 
     public HalAccountController(
-        @Qualifier(AppConstants.CORE_ACCOUNT_TYPE) IAccountService accountService,
+        @Qualifier(AppConstants.CORE_ACCOUNT_TYPE) AccountService accountService,
         TransactionModelAssembler transactionModelAssembler,
-        AccountModelAssembler accountModelAssembler){
+        AccountModelAssembler accountModelAssembler
+    ) {
         this.accountModelAssembler = accountModelAssembler;
         this.accountService = accountService;
         this.transactionAssembler = transactionModelAssembler;
     }
 
     @GetMapping("/accounts/{ac_id}/transactions/{tr_id}")
-    public EntityModel<TransactionBasicDTO> getTransactionId(@PathVariable("ac_id") int ac_id, @PathVariable("tr_id")int tr_id, Authentication authentication) {
-        TransactionBasicDTO dto = accountService.readTransactionByIdAndClientLogin(ac_id, tr_id, authentication.getName());
+    public EntityModel<TransactionResponse> getTransactionId(@PathVariable("ac_id") int ac_id, @PathVariable("tr_id")int tr_id, Authentication authentication) {
+        TransactionResponse dto = accountService.readTransactionByIdAndClientLogin(ac_id, tr_id, authentication.getName());
         transactionAssembler.setAccountId(ac_id);
         transactionAssembler.setAuthentication(authentication);
         return transactionAssembler.toModel(dto);
     }
 
     @GetMapping("/accounts/{id}/transactions")
-    public CollectionModel<EntityModel<TransactionBasicDTO>> getAccountsIdTransactions(@PathVariable(value="id") int id, Authentication authentication){
+    public CollectionModel<EntityModel<TransactionResponse>> getAccountsIdTransactions(@PathVariable(value="id") int id, Authentication authentication){
         transactionAssembler.setAccountId(id);
         transactionAssembler.setAuthentication(authentication);
         
-        List<EntityModel<TransactionBasicDTO>> transactions = accountService.readTransactionByAccountIdAndClientLogin(id, authentication.getName())
+        List<EntityModel<TransactionResponse>> transactions = accountService.readTransactionByAccountIdAndClientLogin(id, authentication.getName())
         .stream()
         .map(transactionAssembler::toModel)
         .collect(Collectors.toList());
@@ -72,7 +73,7 @@ public class HalAccountController {
      * allow hypermedia interaction, see: https://en.wikipedia.org/wiki/HATEOAS
      */
     @PostMapping("/accounts/{id}/transactions")
-    public ResponseEntity<?> postTransaction(@Valid @RequestBody TransactionBasicDTO dto, @PathVariable("id") int account_id, Authentication authentication) {
+    public ResponseEntity<?> postTransaction(@Valid @RequestBody TransactionResponse dto, @PathVariable("id") int account_id, Authentication authentication) {
         dto = accountService.createTransactionByAccountIdAndClientLogin(dto, account_id, authentication.getName());
         
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -83,17 +84,17 @@ public class HalAccountController {
     }
 
     @GetMapping("/accounts/{id}")
-    public EntityModel<AccountBasicDTO> getAccountsId(@PathVariable(value = "id") int id, Authentication authentication){
-        AccountBasicDTO dto = accountService.readByIdAndClientLogin(id, authentication.getName());
+    public EntityModel<AccountResponse> getAccountsId(@PathVariable(value = "id") int id, Authentication authentication){
+        AccountResponse dto = accountService.readByIdAndClientLogin(id, authentication.getName());
         accountModelAssembler.setAuthentication(authentication);
         return accountModelAssembler.toModel(dto);
     }
 
     @GetMapping("/accounts")
-    public CollectionModel<EntityModel<AccountBasicDTO>> getAccounts(Authentication authentication){
+    public CollectionModel<EntityModel<AccountResponse>> getAccounts(Authentication authentication){
         accountModelAssembler.setAuthentication(authentication);
 
-        List<EntityModel<AccountBasicDTO>> accounts = accountService.readByClientLogin(authentication.getName())
+        List<EntityModel<AccountResponse>> accounts = accountService.readByClientLogin(authentication.getName())
         .stream()
         .map(accountModelAssembler::toModel)
         .collect(Collectors.toList());

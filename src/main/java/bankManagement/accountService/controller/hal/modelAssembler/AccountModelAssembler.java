@@ -10,14 +10,14 @@ import org.springframework.stereotype.Component;
 import bankManagement.accountService.controller.hal.HalAccountController;
 import bankManagement.accountService.controller.hal.HalCurrentAccountController;
 import bankManagement.accountService.controller.hal.HalSavingAccountController;
-import bankManagement.accountService.domain.AccountBasicDTO;
+import bankManagement.accountService.domain.AccountResponse;
 import bankManagement.accountService.util.AppConstants;
 
 @Component
-public class AccountModelAssembler extends ModelAssembler<AccountBasicDTO>{
+public class AccountModelAssembler extends ModelAssembler<AccountResponse>{
 
     @Override
-    public EntityModel<AccountBasicDTO> toModel(AccountBasicDTO dto) {
+    public EntityModel<AccountResponse> toModel(AccountResponse dto) {
         WebMvcLinkBuilder accountDetailsLink = null;
 
         if(dto.getAccountType() == AppConstants.CURRENT_ACCOUNT_TYPE){

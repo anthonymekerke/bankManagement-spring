@@ -9,47 +9,45 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import bankManagement.accountService.domain.Account;
-import bankManagement.accountService.domain.AccountBasicDTO;
+import bankManagement.accountService.domain.AccountResponse;
 import bankManagement.accountService.domain.Transaction;
-import bankManagement.accountService.domain.TransactionBasicDTO;
+import bankManagement.accountService.domain.TransactionResponse;
 import bankManagement.accountService.exception.InternalServerErrorException;
 import bankManagement.accountService.exception.NotFoundException;
 import bankManagement.accountService.exception.UnauthorizedException;
-import bankManagement.accountService.repository.IAccountRepository;
-import bankManagement.accountService.repository.ICurrentAccountRepository;
-import bankManagement.accountService.repository.ISavingAccountRepository;
-import bankManagement.accountService.repository.ITransactionRepository;
+import bankManagement.accountService.repository.AccountRepository;
+import bankManagement.accountService.repository.CurrentAccountRepository;
+import bankManagement.accountService.repository.SavingAccountRepository;
+import bankManagement.accountService.repository.TransactionRepository;
 import bankManagement.accountService.util.AppConstants;
 import bankManagement.accountService.util.DTOConverter;
 
 @Service
 @Qualifier(AppConstants.CORE_ACCOUNT_TYPE)
-public class AccountServiceImpl implements IAccountService{
+public class AccountService {
 
-    protected IAccountRepository accountRepository;
-    protected ISavingAccountRepository savingAccountRepository;
-    protected ICurrentAccountRepository currentAccountRepository;
-    protected ITransactionRepository transactionRepository;
+    protected AccountRepository accountRepository;
+    protected SavingAccountRepository savingAccountRepository;
+    protected CurrentAccountRepository currentAccountRepository;
+    protected TransactionRepository transactionRepository;
 
-    public AccountServiceImpl(IAccountRepository accountRepository,
-        ISavingAccountRepository savingAccountRepository,
-        ICurrentAccountRepository currentAccountRepository,
-        ITransactionRepository transactionRepository){
+    public AccountService(AccountRepository accountRepository,
+        SavingAccountRepository savingAccountRepository,
+        CurrentAccountRepository currentAccountRepository,
+        TransactionRepository transactionRepository){
             this.accountRepository = accountRepository;
             this.currentAccountRepository = currentAccountRepository;
             this.savingAccountRepository = savingAccountRepository;
             this.transactionRepository = transactionRepository;
         }
 
-    @Override
-    public AccountBasicDTO readByIdAndClientLogin(int account_id, String client_login) throws UnauthorizedException{
+    public AccountResponse readByIdAndClientLogin(int account_id, String client_login) throws UnauthorizedException{
         Account entity = accountRepository.findByIdAndClient_Login(account_id, client_login).orElse(null);
         if(entity == null){throw new UnauthorizedException("Account n°" + account_id + " not owned by this client.");}
         return DTOConverter.CoreAccountEntitytoBasicDTO(entity, readAccountTypeById(account_id), readBalance(account_id));
     }
 
-    @Override
-    public List<AccountBasicDTO> readByClientLogin(String client_login) throws NotFoundException{
+    public List<AccountResponse> readByClientLogin(String client_login) throws NotFoundException{
         List<Account> entities = accountRepository.findByClient_Login(client_login);
         if(entities.size() == 0){throw new NotFoundException("No Accounts found for this Client");}
         return entities.stream()
@@ -57,8 +55,7 @@ public class AccountServiceImpl implements IAccountService{
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<TransactionBasicDTO> readTransactionByAccountIdAndClientLogin(int account_id, String client_login) throws NotFoundException{
+    public List<TransactionResponse> readTransactionByAccountIdAndClientLogin(int account_id, String client_login) throws NotFoundException{
         List<Transaction> entities = transactionRepository.findByAccount_IdAndAccount_Client_Login(account_id, client_login);
         if(entities.size() == 0){throw new NotFoundException("No transactions found for this Account");}
         return entities.stream()
@@ -66,8 +63,7 @@ public class AccountServiceImpl implements IAccountService{
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public TransactionBasicDTO readTransactionByIdAndClientLogin(int account_id, int transaction_id,
+    public TransactionResponse readTransactionByIdAndClientLogin(int account_id, int transaction_id,
             String client_login) throws UnauthorizedException {
 
         Transaction entity = transactionRepository.findByIdAndAccount_IdAndAccount_Client_Login(transaction_id, account_id, client_login).orElse(null);
@@ -81,8 +77,7 @@ public class AccountServiceImpl implements IAccountService{
      * TODO: Find a way to trigger computing of Transaction balance when value date is passed.
      *  - Maybe use a microservice to handle future transaction ? 
      */
-    @Override
-    public TransactionBasicDTO createTransactionByAccountIdAndClientLogin(TransactionBasicDTO dto, int account_id,
+    public TransactionResponse createTransactionByAccountIdAndClientLogin(TransactionResponse dto, int account_id,
             String client_login) throws UnauthorizedException {
         
         Transaction entity = getLastTransactionByAccountId(account_id);

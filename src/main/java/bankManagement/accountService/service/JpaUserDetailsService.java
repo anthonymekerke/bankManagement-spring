@@ -12,14 +12,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import bankManagement.accountService.domain.Client;
-import bankManagement.accountService.repository.IClientRepository;
+import bankManagement.accountService.repository.ClientRepository;
 
 @Service
 public class JpaUserDetailsService implements UserDetailsService{
 
-    private IClientRepository clientRepository;
+    private ClientRepository clientRepository;
 
-    public JpaUserDetailsService(IClientRepository clientRepository){
+    public JpaUserDetailsService(ClientRepository clientRepository){
         this.clientRepository = clientRepository;
     }
 

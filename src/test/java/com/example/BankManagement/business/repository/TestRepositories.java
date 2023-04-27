@@ -24,9 +24,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import bankManagement.accountService.domain.Account;
 import bankManagement.accountService.domain.Client;
 import bankManagement.accountService.domain.Transaction;
-import bankManagement.accountService.repository.IAccountRepository;
-import bankManagement.accountService.repository.IClientRepository;
-import bankManagement.accountService.repository.ITransactionRepository;
+import bankManagement.accountService.repository.AccountRepository;
+import bankManagement.accountService.repository.ClientRepository;
+import bankManagement.accountService.repository.TransactionRepository;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -34,13 +34,13 @@ import bankManagement.accountService.repository.ITransactionRepository;
 public class TestRepositories {
 
     @Autowired
-    IClientRepository clientRepository;
+    ClientRepository clientRepository;
 
     @Autowired
-    IAccountRepository accountRepository;
+    AccountRepository accountRepository;
 
     @Autowired
-    ITransactionRepository transactionRepository;
+    TransactionRepository transactionRepository;
 
     private Integer idClientTest = null;
     private Integer idAccountTest = null;

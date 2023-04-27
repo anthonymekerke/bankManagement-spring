@@ -16,7 +16,7 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name="bm_client")
-public class Client implements IEntity{
+public class Client {
     
     @Id
     @Column(name="client_id")
@@ -64,12 +64,10 @@ public class Client implements IEntity{
         this.login = login;
     }
 
-    @Override
     public Integer getId() {
         return id;
     }
 
-    @Override
     public void setId(Integer id) {
         this.id = id;
     }

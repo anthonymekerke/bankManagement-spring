@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import bankManagement.accountService.domain.SavingAccount;
 
 @Repository
-public interface ISavingAccountRepository extends JpaRepository<SavingAccount, Integer>{
+public interface SavingAccountRepository extends JpaRepository<SavingAccount, Integer>{
  
     Optional<SavingAccount> findByIdAndClient_Login(Integer id, String client_login);
 }

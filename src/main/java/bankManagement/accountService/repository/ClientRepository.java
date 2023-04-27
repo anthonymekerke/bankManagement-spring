@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import bankManagement.accountService.domain.Client;
 
 @Repository
-public interface IClientRepository extends JpaRepository<Client, Integer>{
+public interface ClientRepository extends JpaRepository<Client, Integer>{
     Optional<Client> findByLogin(String login);
 }

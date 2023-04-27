@@ -10,7 +10,7 @@ import bankManagement.accountService.domain.validation.AlternateNullFields;
 import bankManagement.accountService.domain.validation.StartWithPrefixes;
 
 @AlternateNullFields(first = "withdraw", second = "payment")
-public class TransactionBasicDTO implements IDTO{
+public class TransactionResponse {
     private int id;
 
     @Future(message="value date must be in the future or 'null'.")
@@ -29,10 +29,10 @@ public class TransactionBasicDTO implements IDTO{
     private Date executionDate;
     private Float balance;
 
-    public TransactionBasicDTO() {
+    public TransactionResponse() {
     }
 
-    public TransactionBasicDTO(Date execution_date, Date value_date, float withdrawal, float payment, String wording,
+    public TransactionResponse(Date execution_date, Date value_date, float withdrawal, float payment, String wording,
             float balance) {
         this.executionDate = execution_date;
         this.valueDate = value_date;
@@ -42,7 +42,7 @@ public class TransactionBasicDTO implements IDTO{
         this.balance = balance;
     }
 
-    public TransactionBasicDTO(int id, Date executionDate, Date value_date, float withdrawal, float payment,
+    public TransactionResponse(int id, Date executionDate, Date value_date, float withdrawal, float payment,
             String wording, float balance) {
         this.id = id;
         this.executionDate = executionDate;
@@ -53,12 +53,10 @@ public class TransactionBasicDTO implements IDTO{
         this.balance = balance;
     }
 
-    @Override
     public int getId() {
         return this.id;
     }
 
-    @Override
     public void setId(int id) {
         this.id = id;
     }

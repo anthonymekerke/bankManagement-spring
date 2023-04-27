@@ -2,19 +2,19 @@ package bankManagement.accountService.domain;
 
 import java.util.Date;
 
-public class SavingAccountBasicDTO extends AccountBasicDTO{
+public class SavingAccountResponse extends AccountResponse{
     private float interestRate;
 
-    public SavingAccountBasicDTO() {
+    public SavingAccountResponse() {
     }
 
-    public SavingAccountBasicDTO(String iban, String label, Date creation_date, String account_type, float balance,
+    public SavingAccountResponse(String iban, String label, Date creation_date, String account_type, float balance,
             float interestRate) {
         super(iban, label, creation_date, account_type, balance);
         this.interestRate = interestRate;
     }
 
-    public SavingAccountBasicDTO(int id, String iban, String label, Date creation_date, String account_type,
+    public SavingAccountResponse(int id, String iban, String label, Date creation_date, String account_type,
             float balance, float interestRate) {
         super(id, iban, label, creation_date, account_type, balance);
         this.interestRate = interestRate;

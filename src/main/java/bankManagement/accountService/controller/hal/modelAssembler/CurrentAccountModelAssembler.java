@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component;
 
 import bankManagement.accountService.controller.hal.HalAccountController;
 import bankManagement.accountService.controller.hal.HalCurrentAccountController;
-import bankManagement.accountService.domain.CurrentAccountBasicDTO;
+import bankManagement.accountService.domain.CurrentAccountResponse;
 
 @Component
-public class CurrentAccountModelAssembler extends ModelAssembler<CurrentAccountBasicDTO>{
+public class CurrentAccountModelAssembler extends ModelAssembler<CurrentAccountResponse>{
 
     @Override
-    public EntityModel<CurrentAccountBasicDTO> toModel(CurrentAccountBasicDTO dto) {
+    public EntityModel<CurrentAccountResponse> toModel(CurrentAccountResponse dto) {
         return EntityModel.of(dto,
             linkTo(methodOn(HalCurrentAccountController.class).getCurrentAccountsId(dto.getId(), authentication)).withSelfRel(),
             linkTo(methodOn(HalAccountController.class).getAccountsId(dto.getId(), authentication)).withRel("account")

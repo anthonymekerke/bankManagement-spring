@@ -21,7 +21,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name="bm_account")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Account implements IEntity{
+public class Account {
     
     @Id
     @Column(name="account_id")
@@ -65,12 +65,10 @@ public class Account implements IEntity{
         this.client = client;
     }
 
-    @Override
     public Integer getId() {
         return id;
     }
 
-    @Override
     public void setId(Integer id) {
         this.id = id;        
     }

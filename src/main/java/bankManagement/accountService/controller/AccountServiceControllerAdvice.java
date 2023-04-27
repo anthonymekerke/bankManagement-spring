@@ -1,4 +1,4 @@
-package bankManagement.accountService.configuration;
+package bankManagement.accountService.controller;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,7 +19,7 @@ import bankManagement.accountService.exception.NotFoundException;
 import bankManagement.accountService.exception.UnauthorizedException;
 
 @RestControllerAdvice
-public class RestExceptionHandler {
+public class AccountServiceControllerAdvice {
     
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<Map<String, List<String>>> handleGeneralExceptions(Exception ex) {

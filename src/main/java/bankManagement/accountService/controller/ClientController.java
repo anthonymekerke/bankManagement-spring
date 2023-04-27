@@ -4,20 +4,20 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import bankManagement.accountService.domain.ClientBasicDTO;
-import bankManagement.accountService.service.IClientService;
+import bankManagement.accountService.domain.ClientResponse;
+import bankManagement.accountService.service.ClientService;
 
 @RestController
 public class ClientController {
     
-    IClientService clientService;
+    ClientService clientService;
 
-    public ClientController(IClientService clientService){
+    public ClientController(ClientService clientService){
         this.clientService = clientService;
     }
 
     @GetMapping("/clients")
-    public ClientBasicDTO getClients(Authentication authentication){
+    public ClientResponse getClients(Authentication authentication){
         return clientService.readClientByLogin(authentication.getName());
     }
 }

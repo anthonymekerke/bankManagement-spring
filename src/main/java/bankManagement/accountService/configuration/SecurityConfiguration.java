@@ -34,12 +34,12 @@ import bankManagement.accountService.util.SecurityConstants;
 
 @Configuration
 @EnableWebSecurity //mark this class as the default web configurer
-public class SecurityConfig {
+public class SecurityConfiguration {
 
     private final JpaUserDetailsService jpaUserDetailsService;
     private RsaKeyProperties rsaKeys;
 
-    public SecurityConfig(
+    public SecurityConfiguration(
         RsaKeyProperties rsaKeys, 
         JpaUserDetailsService jpaUserDetailsService){
         this.rsaKeys = rsaKeys;

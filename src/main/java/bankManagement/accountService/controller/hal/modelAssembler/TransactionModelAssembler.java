@@ -7,15 +7,15 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Component;
 
 import bankManagement.accountService.controller.hal.HalAccountController;
-import bankManagement.accountService.domain.TransactionBasicDTO;
+import bankManagement.accountService.domain.TransactionResponse;
 
 @Component
-public class TransactionModelAssembler extends ModelAssembler<TransactionBasicDTO>{
+public class TransactionModelAssembler extends ModelAssembler<TransactionResponse>{
 
     private int accountId;
 
     @Override
-    public EntityModel<TransactionBasicDTO> toModel(TransactionBasicDTO dto) {
+    public EntityModel<TransactionResponse> toModel(TransactionResponse dto) {
         return EntityModel.of(dto,
             linkTo(methodOn(HalAccountController.class).getTransactionId(accountId, dto.getId(), authentication)).withSelfRel(),
             linkTo(methodOn(HalAccountController.class).getAccountsIdTransactions(accountId, authentication)).withRel("transactions"),

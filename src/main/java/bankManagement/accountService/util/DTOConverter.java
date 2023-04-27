@@ -3,17 +3,17 @@ package bankManagement.accountService.util;
 import org.springframework.beans.BeanUtils;
 
 import bankManagement.accountService.domain.Account;
-import bankManagement.accountService.domain.AccountBasicDTO;
+import bankManagement.accountService.domain.AccountResponse;
 import bankManagement.accountService.domain.Client;
-import bankManagement.accountService.domain.ClientBasicDTO;
-import bankManagement.accountService.domain.CurrentAccountBasicDTO;
-import bankManagement.accountService.domain.SavingAccountBasicDTO;
+import bankManagement.accountService.domain.ClientResponse;
+import bankManagement.accountService.domain.CurrentAccountResponse;
+import bankManagement.accountService.domain.SavingAccountResponse;
 import bankManagement.accountService.domain.Transaction;
-import bankManagement.accountService.domain.TransactionBasicDTO;
+import bankManagement.accountService.domain.TransactionResponse;
 
 public class DTOConverter {
     
-    public static Transaction BasicDTOtoEntity(TransactionBasicDTO dto){
+    public static Transaction BasicDTOtoEntity(TransactionResponse dto){
         Transaction entity = new Transaction();
 
         entity.setBalance(dto.getBalance());
@@ -27,8 +27,8 @@ public class DTOConverter {
         return entity;
     }
 
-    public static TransactionBasicDTO EntitytoBasicDTO(Transaction entity){
-        TransactionBasicDTO dto = new TransactionBasicDTO();
+    public static TransactionResponse EntitytoBasicDTO(Transaction entity){
+        TransactionResponse dto = new TransactionResponse();
         
         dto.setBalance(entity.getBalance());
         dto.setExecutionDate(entity.getExecutionDate());
@@ -42,31 +42,31 @@ public class DTOConverter {
         return dto;
     }
 
-    public static ClientBasicDTO EntitytoBasicDTO(Client entity){
-        ClientBasicDTO dto = new ClientBasicDTO();
+    public static ClientResponse EntitytoBasicDTO(Client entity){
+        ClientResponse dto = new ClientResponse();
         BeanUtils.copyProperties(entity, dto);
         return dto;
     }
 
-    private static AccountBasicDTO EntitytoBasicDTO(Account entity, AccountBasicDTO dto, String accountType, float balance){
+    private static AccountResponse EntitytoBasicDTO(Account entity, AccountResponse dto, String accountType, float balance){
         BeanUtils.copyProperties(entity, dto);
         dto.setAccountType(accountType);
         dto.setBalance(balance);
         return dto;
     }
 
-    public static AccountBasicDTO CoreAccountEntitytoBasicDTO(Account entity, String accountType, float balance){
-        AccountBasicDTO dto = new AccountBasicDTO();
+    public static AccountResponse CoreAccountEntitytoBasicDTO(Account entity, String accountType, float balance){
+        AccountResponse dto = new AccountResponse();
         return EntitytoBasicDTO(entity, dto, accountType, balance);
     }
 
-    public static AccountBasicDTO SavingAccountEntitytoBasicDTO(Account entity, float balance){
-        AccountBasicDTO dto = new SavingAccountBasicDTO();
+    public static AccountResponse SavingAccountEntitytoBasicDTO(Account entity, float balance){
+        AccountResponse dto = new SavingAccountResponse();
         return EntitytoBasicDTO(entity, dto, AppConstants.SAVING_ACCOUNT_TYPE, balance);
     }
 
-    public static AccountBasicDTO CurrentAccountEntitytoBasicDTO(Account entity, float balance){
-        AccountBasicDTO dto = new CurrentAccountBasicDTO();
+    public static AccountResponse CurrentAccountEntitytoBasicDTO(Account entity, float balance){
+        AccountResponse dto = new CurrentAccountResponse();
         return EntitytoBasicDTO(entity, dto, AppConstants.CURRENT_ACCOUNT_TYPE, balance);
     }
 }

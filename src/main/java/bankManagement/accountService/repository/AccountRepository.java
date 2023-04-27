@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import bankManagement.accountService.domain.Account;
 
 @Repository
-public interface IAccountRepository extends JpaRepository<Account, Integer>{
+public interface AccountRepository extends JpaRepository<Account, Integer>{
     
     Optional<Account> findByIdAndClient_Login(Integer id, String client_login);
     List<Account> findByClient_Login(String client_login);

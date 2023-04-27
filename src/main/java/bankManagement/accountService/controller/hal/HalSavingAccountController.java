@@ -9,27 +9,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import bankManagement.accountService.controller.hal.modelAssembler.SavingAccountModelAssembler;
-import bankManagement.accountService.domain.SavingAccountBasicDTO;
-import bankManagement.accountService.service.IAccountService;
+import bankManagement.accountService.domain.SavingAccountResponse;
+import bankManagement.accountService.service.AccountService;
 import bankManagement.accountService.util.AppConstants;
 
 @RestController
 @RequestMapping("/HAL")
 public class HalSavingAccountController {
 
-    private IAccountService accountService;
+    private AccountService accountService;
     private SavingAccountModelAssembler modelAssembler;
 
     public HalSavingAccountController(
-        @Qualifier(AppConstants.SAVING_ACCOUNT_TYPE) IAccountService accountService,
-        SavingAccountModelAssembler modelAssembler){
+        @Qualifier(AppConstants.SAVING_ACCOUNT_TYPE) AccountService accountService,
+        SavingAccountModelAssembler modelAssembler
+    ) {
         this.accountService = accountService;
         this.modelAssembler = modelAssembler;
     }
 
     @GetMapping("/saving-accounts/{id}")
-    public EntityModel<SavingAccountBasicDTO> getCurrentAccountsId(@PathVariable(value="id")int id,Authentication authentication){
-        SavingAccountBasicDTO dto = (SavingAccountBasicDTO)accountService.readByIdAndClientLogin(id, authentication.getName());
+    public EntityModel<SavingAccountResponse> getCurrentAccountsId(@PathVariable(value="id")int id,Authentication authentication){
+        SavingAccountResponse dto = (SavingAccountResponse)accountService.readByIdAndClientLogin(id, authentication.getName());
         modelAssembler.setAuthentication(authentication);
         return modelAssembler.toModel(dto); 
     }

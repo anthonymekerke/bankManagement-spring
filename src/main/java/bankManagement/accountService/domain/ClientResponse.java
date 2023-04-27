@@ -2,7 +2,7 @@ package bankManagement.accountService.domain;
 
 import java.util.Date;
 
-public class ClientBasicDTO implements IDTO{
+public class ClientResponse {
 
     private int id;
     private String lastname;
@@ -12,10 +12,10 @@ public class ClientBasicDTO implements IDTO{
     private String password;
     private Date accessionDate;
 
-    public ClientBasicDTO() {
+    public ClientResponse() {
     }
 
-    public ClientBasicDTO(String lastname, String firstname, String email, String login, String password,
+    public ClientResponse(String lastname, String firstname, String email, String login, String password,
             Date accessionDate) {
         this.lastname = lastname;
         this.firstname = firstname;
@@ -25,7 +25,7 @@ public class ClientBasicDTO implements IDTO{
         this.accessionDate = accessionDate;
     }
 
-    public ClientBasicDTO(int id, String lastname, String firstname, String email, String login, String password,
+    public ClientResponse(int id, String lastname, String firstname, String email, String login, String password,
             Date accessionDate) {
         this.id = id;
         this.lastname = lastname;
@@ -36,12 +36,10 @@ public class ClientBasicDTO implements IDTO{
         this.accessionDate = accessionDate;
     }
 
-    @Override
     public int getId() {
         return this.id;
     }
     
-    @Override
     public void setId(int id) {
         this.id = id;
     }
