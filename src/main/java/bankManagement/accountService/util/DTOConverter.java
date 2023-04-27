@@ -60,13 +60,13 @@ public class DTOConverter {
         return EntitytoBasicDTO(entity, dto, accountType, balance);
     }
 
-    public static AccountResponse SavingAccountEntitytoBasicDTO(Account entity, float balance){
+    public static SavingAccountResponse SavingAccountEntitytoBasicDTO(Account entity, float balance){
         AccountResponse dto = new SavingAccountResponse();
-        return EntitytoBasicDTO(entity, dto, AppConstants.SAVING_ACCOUNT_TYPE, balance);
+        return (SavingAccountResponse)EntitytoBasicDTO(entity, dto, AppConstants.SAVING_ACCOUNT_TYPE, balance);
     }
 
-    public static AccountResponse CurrentAccountEntitytoBasicDTO(Account entity, float balance){
+    public static CurrentAccountResponse CurrentAccountEntitytoBasicDTO(Account entity, float balance){
         AccountResponse dto = new CurrentAccountResponse();
-        return EntitytoBasicDTO(entity, dto, AppConstants.CURRENT_ACCOUNT_TYPE, balance);
+        return (CurrentAccountResponse)EntitytoBasicDTO(entity, dto, AppConstants.CURRENT_ACCOUNT_TYPE, balance);
     }
 }

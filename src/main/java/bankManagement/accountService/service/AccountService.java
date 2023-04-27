@@ -5,11 +5,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import bankManagement.accountService.domain.Account;
 import bankManagement.accountService.domain.AccountResponse;
+import bankManagement.accountService.domain.CurrentAccountResponse;
+import bankManagement.accountService.domain.SavingAccountResponse;
 import bankManagement.accountService.domain.Transaction;
 import bankManagement.accountService.domain.TransactionResponse;
 import bankManagement.accountService.exception.InternalServerErrorException;
@@ -23,7 +24,6 @@ import bankManagement.accountService.util.AppConstants;
 import bankManagement.accountService.util.DTOConverter;
 
 @Service
-@Qualifier(AppConstants.CORE_ACCOUNT_TYPE)
 public class AccountService {
 
     protected AccountRepository accountRepository;
@@ -31,20 +31,34 @@ public class AccountService {
     protected CurrentAccountRepository currentAccountRepository;
     protected TransactionRepository transactionRepository;
 
-    public AccountService(AccountRepository accountRepository,
+    public AccountService(
+        AccountRepository accountRepository,
         SavingAccountRepository savingAccountRepository,
         CurrentAccountRepository currentAccountRepository,
-        TransactionRepository transactionRepository){
-            this.accountRepository = accountRepository;
-            this.currentAccountRepository = currentAccountRepository;
-            this.savingAccountRepository = savingAccountRepository;
-            this.transactionRepository = transactionRepository;
-        }
+        TransactionRepository transactionRepository
+    ) {
+        this.accountRepository = accountRepository;
+        this.currentAccountRepository = currentAccountRepository;
+        this.savingAccountRepository = savingAccountRepository;
+        this.transactionRepository = transactionRepository;
+    }
 
     public AccountResponse readByIdAndClientLogin(int account_id, String client_login) throws UnauthorizedException{
         Account entity = accountRepository.findByIdAndClient_Login(account_id, client_login).orElse(null);
         if(entity == null){throw new UnauthorizedException("Account n°" + account_id + " not owned by this client.");}
         return DTOConverter.CoreAccountEntitytoBasicDTO(entity, readAccountTypeById(account_id), readBalance(account_id));
+    }
+
+    public CurrentAccountResponse readCurrentAccountByIdAndClientLogin(int account_id, String client_login) throws UnauthorizedException{
+        Account entity = currentAccountRepository.findByIdAndClient_Login(account_id, client_login).orElse(null);
+        if(entity == null){throw new UnauthorizedException("The Current Account n°" + account_id + " is not owned by this client.");}
+        return DTOConverter.CurrentAccountEntitytoBasicDTO(entity, readBalance(account_id));
+    }
+
+    public SavingAccountResponse readSavingAccountByIdAndClientLogin(int account_id, String client_login) throws UnauthorizedException{
+        Account entity = savingAccountRepository.findByIdAndClient_Login(account_id, client_login).orElse(null);
+        if(entity == null){throw new UnauthorizedException("The Saving Accounts n°"+account_id+" is not owned by this client.");}
+        return DTOConverter.SavingAccountEntitytoBasicDTO(entity, readBalance(account_id));
     }
 
     public List<AccountResponse> readByClientLogin(String client_login) throws NotFoundException{

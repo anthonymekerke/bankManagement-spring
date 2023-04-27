@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,9 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import bankManagement.accountService.domain.AccountResponse;
+import bankManagement.accountService.domain.CurrentAccountResponse;
+import bankManagement.accountService.domain.SavingAccountResponse;
 import bankManagement.accountService.domain.TransactionResponse;
 import bankManagement.accountService.service.AccountService;
-import bankManagement.accountService.util.AppConstants;
 
 @RestController
 public class AccountController {
@@ -26,7 +26,7 @@ public class AccountController {
     private AccountService accountService;
 
     public AccountController(
-        @Qualifier(AppConstants.CORE_ACCOUNT_TYPE) AccountService accountService
+        AccountService accountService
     ) {
         this.accountService = accountService;
     }
@@ -54,16 +54,26 @@ public class AccountController {
 
     @GetMapping("/accounts/{id}/transactions")
     public List<TransactionResponse> getAccountsIdTransactions(@PathVariable(value="id") int id, Authentication authentication){
-        return this.accountService.readTransactionByAccountIdAndClientLogin(id, authentication.getName());
+        return accountService.readTransactionByAccountIdAndClientLogin(id, authentication.getName());
     }
 
     @GetMapping("/accounts/{id}")
     public AccountResponse getAccountsId(@PathVariable(value = "id") int id, Authentication authentication){
-        return this.accountService.readByIdAndClientLogin(id, authentication.getName());
+        return accountService.readByIdAndClientLogin(id, authentication.getName());
     }
 
     @GetMapping("/accounts")
     public List<AccountResponse> getAccounts(Authentication authentication){
-        return this.accountService.readByClientLogin(authentication.getName());
+        return accountService.readByClientLogin(authentication.getName());
+    }
+
+    @GetMapping("/current-accounts/{id}")
+    public CurrentAccountResponse getCurrentAccountsId(@PathVariable(value="id")int id,Authentication authentication){
+        return accountService.readCurrentAccountByIdAndClientLogin(id, authentication.getName());
+    }
+
+    @GetMapping("/saving-accounts/{id}")
+    public SavingAccountResponse getSavingAccountsId(@PathVariable(value="id") int id, Authentication authentication){
+        return (SavingAccountResponse)accountService.readSavingAccountByIdAndClientLogin(id, authentication.getName());
     }
 }
